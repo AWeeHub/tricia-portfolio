@@ -43,46 +43,44 @@
       border-bottom: 1px solid transparent;
     }
     nav.scrolled {
-      background: rgba(26,18,9,.94);
-      backdrop-filter: blur(22px);
+      background: rgba(245,237,224,.6);
+      backdrop-filter: blur(18px);
       padding: 14px 60px;
-      border-color: rgba(255,255,255,.06);
+      border-color: rgba(26,18,9,.08);
     }
     .nav-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; }
     .nav-monogram {
-      width: 34px; height: 34px; border-radius: 3px; background: var(--plum);
+      width: 34px; height: 34px; border-radius: 3px; background: var(--dark);
       display: flex; align-items: center; justify-content: center;
       font-family: 'Fraunces', serif; font-weight: 700; font-size: 12px;
       color: #fff; flex-shrink: 0; transition: background .2s;
     }
-    nav:not(.scrolled) .nav-monogram { background: var(--dark); }
     .nav-logo:hover .nav-monogram { background: var(--plum-m); }
     .nav-wordmark {
       font-family: 'Fraunces', serif; font-optical-sizing: auto;
       font-weight: 600; font-size: 16px; letter-spacing: .06em;
       color: var(--dark); transition: color .3s;
     }
-    nav.scrolled .nav-wordmark { color: #FDFAF5; }
     .nav-links { list-style: none; display: flex; align-items: center; gap: 34px; }
     .nav-links a {
       font-size: 11.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
       color: rgba(26,18,9,.45); text-decoration: none; transition: color .2s;
     }
-    nav.scrolled .nav-links a { color: rgba(253,250,245,.5); }
     .nav-links a:hover { color: var(--dark); }
-    nav.scrolled .nav-links a:hover { color: #FDFAF5; }
     .nav-cta {
       background: var(--dark) !important; color: #FDFAF5 !important;
       padding: 9px 22px !important; border-radius: 2px;
       transition: background .2s !important;
     }
-    nav.scrolled .nav-cta { background: var(--plum) !important; }
     .nav-cta:hover { background: var(--plum) !important; }
 
     /* hamburger */
     .hbg { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; z-index: 510; }
     .hbg span { display: block; width: 26px; height: 2px; background: var(--dark); transition: all .3s; }
-    nav.scrolled .hbg span { background: #FDFAF5; }
+    /* The X (open) state always sits over .mob-menu's dark full-screen
+       overlay, regardless of scroll position — force it light so it's
+       never a dark icon on a dark background. */
+    .hbg.open span { background: #FDFAF5; }
     .hbg.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hbg.open span:nth-child(2) { opacity: 0; }
     .hbg.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -131,7 +129,7 @@
     }
     .ghost-line-1 { font-size: clamp(80px, 17vw, 240px); }
     .ghost-line-2 { font-size: clamp(80px, 17vw, 240px); }
-    .ghost-line-3 { font-size: clamp(42px, 8.5vw, 120px); color: rgba(26,18,9,.045); }
+    .ghost-line-3 { font-size: clamp(64px, 13vw, 180px); color: rgba(26,18,9,.045); }
 
     /* Plum underline accent on last ghost line */
     .ghost-line-accent {
@@ -154,12 +152,12 @@
       mix-blend-mode: multiply;
     }
 
-    /* ─── TOP BADGE + HEADLINE — sits above the photo's head, below the nav ─── */
-    .hero-top-badge {
-      position: absolute; z-index: 3;
-      top: 118px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 16px;
-      text-align: center;
+    /* ─── LEFT COLUMN — badge + headline, vertically centered beside photo ─── */
+    .hero-left {
+      position: absolute; z-index: 5;
+      left: clamp(24px, 5vw, 60px); top: 46%; transform: translateY(-50%);
+      max-width: min(540px, 32vw);
+      display: flex; flex-direction: column; align-items: flex-start; gap: 26px;
     }
     .hero-avail {
       display: inline-flex; align-items: center; gap: 8px;
@@ -174,10 +172,10 @@
     }
     .hero-avail span { font-size: 10.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
     @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.35; transform:scale(.7); } }
-    .hero-top-headline {
-      font-family: 'Inter', sans-serif; font-weight: 600;
-      font-size: clamp(15px, 1.8vw, 21px); letter-spacing: .1em; text-transform: uppercase;
-      color: var(--dark); margin: 0; white-space: nowrap;
+    .hero-headline {
+      font-family: 'Fraunces', serif; font-optical-sizing: auto;
+      font-weight: 600; font-size: clamp(26px, 4vw, 66px);
+      line-height: 1.06; letter-spacing: -.02em; color: var(--dark);
     }
 
     .btn-dark {
@@ -213,7 +211,17 @@
       .hero-avail .dot { animation: none; }
     }
 
-    /* ─── HERO INTRO OVERLAY ─── */
+    /* ─── RIGHT COLUMN — supporting copy beside photo ─── */
+    .hero-right {
+      position: absolute; z-index: 5;
+      right: clamp(24px, 6vw, 100px); top: 50%; transform: translateY(-6%);
+      max-width: min(320px, 24vw);
+      display: flex; flex-direction: column; gap: 22px;
+    }
+    .hero-right-body { font-size: clamp(12.5px, 1vw, 15px); line-height: 1.76; color: var(--mid); }
+    .hero-right-rule { width: 68px; height: 1px; background: rgba(26,18,9,.3); }
+
+    /* ─── HERO INTRO OVERLAY (About — Ch2, revealed on scroll) ─── */
     .hero-intro {
       position: absolute; inset: 0; z-index: 4;
       display: flex; flex-direction: column;
@@ -240,8 +248,6 @@
        GSAP reveals it) — the CTA needs its own pointer-events back so it's
        actually clickable once visible. */
     .hero-intro-cta { margin-top: 32px; pointer-events: auto; }
-
-    /* ─── HERO CH3 — Services teaser ─── */
 
     /* ─── SHARED ─── */
     .s-inner { max-width: 1200px; margin: 0 auto; padding: 110px 60px; position: relative; }
@@ -399,13 +405,13 @@
       margin-bottom: 36px;
     }
     .scs-cta {
-      display: inline-block; border: 1px solid rgba(26,18,9,.25);
-      color: rgba(26,18,9,.8); text-decoration: none;
+      display: inline-block; background: var(--dark); color: #FDFAF5;
+      text-decoration: none;
       font-size: 11.5px; font-weight: 600; letter-spacing: .14em;
       text-transform: uppercase; padding: 13px 28px; border-radius: 2px;
-      transition: border-color .2s, color .2s, background .2s;
+      transition: background .2s, transform .15s;
     }
-    .scs-cta:hover { border-color: var(--plum); color: var(--plum); background: rgba(123,95,138,.05); }
+    .scs-cta:hover { background: var(--plum); transform: translateY(-1px); }
 
     /* Right — card deck */
     .scs-right {
@@ -439,10 +445,11 @@
       flex: 1; perspective: 700px;
     }
 
-    /* ─── Clay sculpture (stack-card center piece) ───
-       Float (translateY) and turn (rotateX/Y) are split across nested
-       elements — both animate the "transform" property, and stacking
-       two transform animations on one element only keeps the last. */
+    /* ─── Premium line icon (stack-card center piece) ───
+       Float (translateY) lives on a nested element since the hover-tilt
+       parallax (JS, .clay-stage rotateX/Y on mousemove) also animates
+       "transform" — stacking two transform animations on one element
+       would only keep the last. */
     .clay-stage {
       position: relative; width: 92px; height: 92px;
       transform-style: preserve-3d;
@@ -453,32 +460,29 @@
       transform-style: preserve-3d;
       animation: clayFloat 6s ease-in-out infinite;
     }
-    .clay-shape {
+    .icon-premium {
       width: 100%; height: 100%; display: block;
-      filter: drop-shadow(0 14px 22px rgba(0,0,0,.5));
-      animation: clayTurn 11s ease-in-out infinite;
-      transform-style: preserve-3d; will-change: transform;
+      fill: none; stroke: var(--gold);
+      stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round;
+      filter: drop-shadow(0 10px 18px rgba(196,151,90,.32)) drop-shadow(0 3px 6px rgba(26,18,9,.22));
     }
+    .icon-premium .icon-fill { fill: var(--gold); stroke: none; }
     .clay-shadow {
       position: absolute; left: 50%; bottom: -14px;
       width: 64px; height: 14px; margin-left: -32px;
-      background: radial-gradient(closest-side, rgba(0,0,0,.45), transparent 75%);
+      background: radial-gradient(closest-side, rgba(196,151,90,.4), transparent 75%);
       animation: clayShadowPulse 6s ease-in-out infinite;
     }
     @keyframes clayFloat {
       0%, 100% { transform: translateY(0); }
       50%      { transform: translateY(-9px); }
     }
-    @keyframes clayTurn {
-      0%, 100% { transform: rotateY(-20deg) rotateX(4deg); }
-      50%      { transform: rotateY(20deg) rotateX(-4deg); }
-    }
     @keyframes clayShadowPulse {
       0%, 100% { transform: scale(1); opacity: .8; }
       50%      { transform: scale(.78); opacity: .45; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .clay-float, .clay-shape, .clay-shadow { animation: none; }
+      .clay-float, .clay-shadow { animation: none; }
     }
     .scs-card-num {
       font-family: 'Fraunces', serif; font-optical-sizing: auto;
@@ -582,12 +586,13 @@
 
     /* ─── CONTACT ─── */
     #contact { background: var(--bg); position: relative; }
-    .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 60px; align-items: start; }
-    .contact-body { font-size: 16.5px; line-height: 1.76; color: var(--mid); margin-bottom: 40px; }
-    .c-links { display: flex; flex-direction: column; }
+    .contact-wrap { max-width: 640px; margin: 0 auto; text-align: center; }
+    .contact-wrap .s-heading { margin-bottom: 26px; }
+    .contact-body { font-size: 16.5px; line-height: 1.76; color: var(--mid); margin: 0 auto 40px; max-width: 520px; }
+    .c-links { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 12px 36px; }
     .c-link {
-      display: flex; align-items: center; gap: 16px; padding: 16px 0;
-      border-bottom: 1px solid var(--border-l); color: rgba(26,18,9,.55);
+      display: flex; align-items: center; gap: 12px; padding: 4px 0;
+      color: rgba(26,18,9,.55);
       text-decoration: none; font-size: 14.5px; font-weight: 500; transition: color .2s;
     }
     .c-link:hover { color: var(--dark); }
@@ -595,26 +600,6 @@
       width: 34px; height: 34px; background: rgba(123,95,138,.1);
       border-radius: 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-    .contact-form { display: flex; flex-direction: column; gap: 17px; }
-    .fg { display: flex; flex-direction: column; gap: 6px; }
-    .fg label { font-size: 10.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(26,18,9,.38); }
-    .fg input, .fg textarea, .fg select {
-      background: rgba(26,18,9,.04); border: 1px solid rgba(26,18,9,.12);
-      border-radius: 2px; padding: 12px 14px; font-size: 14px;
-      font-family: 'Inter', sans-serif; color: var(--dark); outline: none;
-      transition: border-color .2s;
-    }
-    .fg input::placeholder, .fg textarea::placeholder { color: rgba(26,18,9,.22); }
-    .fg input:focus, .fg textarea:focus, .fg select:focus { border-color: var(--plum); }
-    .fg textarea { resize: vertical; min-height: 100px; }
-    .fg select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236A5A48'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
-    .form-btn {
-      background: var(--dark); color: #FDFAF5; border: none; padding: 15px 32px;
-      font-family: 'Inter', sans-serif; font-size: 12.5px; font-weight: 600;
-      letter-spacing: .1em; text-transform: uppercase; border-radius: 2px; cursor: pointer;
-      width: 100%; transition: background .2s;
-    }
-    .form-btn:hover { background: var(--plum); }
 
     /* ─── FOOTER ─── */
     footer {
@@ -629,7 +614,7 @@
       color: var(--plum-l);
     }
     .f-name { font-family: 'Fraunces', serif; font-weight: 600; font-size: 14px; color: rgba(253,250,245,.28); }
-    .f-copy { font-size: 11.5px; color: rgba(253,250,245,.17); letter-spacing: .04em; }
+    .f-copy { font-size: 11.5px; color: #FDFAF5; letter-spacing: .04em; }
 
     /* ─── PANEL REVEAL (wine-website stacked card) ─── */
     .panel-reveal {
@@ -657,20 +642,39 @@
       .nav-links { display: none; }
       .hbg { display: flex; }
 
-      #hero { height: 100dvh; }
-      .hero-top-badge { top: 84px; padding: 0 24px; gap: 12px; }
-      .hero-top-headline { white-space: normal; letter-spacing: .06em; max-width: 280px; }
-      .hero-ghost .ghost-line-1, .hero-ghost .ghost-line-2 { font-size: clamp(60px, 14vw, 120px); }
-      .hero-ghost .ghost-line-3 { font-size: clamp(30px, 7vw, 64px); }
+      /* Mobile hero: no room/UX pattern for the desktop pinned chapter-swap
+         (photo slides away to reveal the About bio) — the JS mobile branch
+         never animates #hero-intro's opacity in, so on phones it stayed at
+         its default opacity:0 forever, silently hiding the entire About
+         chapter. Fix: drop the absolute-positioned overlay layout for a
+         normal top-to-bottom flex stack so everything is just always
+         visible in reading order — badge/headline, photo, About copy. */
+      #hero {
+        height: auto; min-height: 100dvh; overflow: visible;
+        display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+        padding: 100px 24px 56px; gap: 28px;
+      }
+      .hero-ghost { display: none; }
+      .hero-photo { position: relative; bottom: auto; left: auto; transform: none; height: 46vh; order: 2; }
+      .hero-left {
+        position: relative; left: auto; top: auto; transform: none;
+        align-items: center; text-align: center; padding: 0; gap: 12px; max-width: 320px;
+        order: 1;
+      }
+      .hero-headline { font-size: clamp(26px, 6.6vw, 40px); text-align: center; }
+      .hero-right { display: none; }
+      .hero-intro {
+        position: relative; inset: auto; opacity: 1; pointer-events: auto;
+        padding: 0; text-align: center; align-items: center; max-width: 340px;
+        order: 3;
+      }
+      .scroll-ind { position: relative; bottom: auto; order: 4; margin-top: 8px; }
 
       .s-inner, .s-inner-narrow { padding: 76px 24px; }
       .ab-inner { padding: 80px 24px; }
       .ab-grid { grid-template-columns: 1fr; }
       .ab-item { padding: 36px 24px; }
-      .svc-grid, .contact-wrap { grid-template-columns: 1fr; gap: 44px; }
-      /* Stacked layout puts the form first — it's the primary action,
-         not buried below the intro paragraph and three contact links. */
-      .contact-wrap .contact-form { order: -1; }
+      .svc-grid { grid-template-columns: 1fr; gap: 44px; }
       .why-grid { grid-template-columns: repeat(2,1fr); }
       footer { flex-direction: column; gap: 8px; padding: 20px 24px; text-align: center; }
 
@@ -681,7 +685,7 @@
       .scs-deck { width: 280px; height: 370px; }
     }
     @media (max-width: 600px) {
-      .hero-photo { height: 75vh; }
+      .hero-photo { height: 40vh; }
       .svc-card { padding: 32px 20px; }
       .why-grid { grid-template-columns: 1fr; }
       .why-card { padding: 26px 20px; }
@@ -693,21 +697,6 @@
   </style>
 </head>
 <body>
-
-<!-- ─── SHARED CLAY MATERIAL (used by the stack-card sculptures) ─── -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <linearGradient id="clayGrad" x1="20%" y1="10%" x2="85%" y2="95%">
-      <stop offset="0%" stop-color="#EAD9BD"/>
-      <stop offset="45%" stop-color="#B58E5C"/>
-      <stop offset="100%" stop-color="#43301D"/>
-    </linearGradient>
-    <radialGradient id="claySheen" cx="30%" cy="25%" r="60%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity=".9"/>
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-</svg>
 
 <!-- ─── LIGHTBOX ─── -->
 <div class="lb" id="lb" role="dialog" aria-modal="true">
@@ -751,13 +740,19 @@
     <img src="./tricia.png" alt="Tricia Claire Navales — Executive Assistant" loading="eager" />
   </div>
 
-  <!-- Badge + headline, above the photo's head -->
-  <div class="hero-top-badge" id="heroTopBadge">
+  <!-- Left column: badge + headline -->
+  <div class="hero-left" id="heroLeft">
     <div class="hero-avail">
       <div class="dot"></div>
       <span>Available worldwide</span>
     </div>
-    <h1 class="hero-top-headline">Your General Virtual Assistant</h1>
+    <h1 class="hero-headline">The Support<br>Behind Growing<br>Businesses</h1>
+  </div>
+
+  <!-- Right column: supporting copy -->
+  <div class="hero-right" id="heroRight">
+    <p class="hero-right-body">Supporting founders and growing teams by bringing structure, organization, and reliable execution to the work behind the scenes.</p>
+    <div class="hero-right-rule"></div>
   </div>
 
   <!-- Chapter 2: About — hidden initially, revealed on scroll as photo exits -->
@@ -767,8 +762,6 @@
     <p class="hero-intro-body">Years supporting founders across AU and the US — not just completing tasks, but learning how you work, filling gaps before they become problems, and treating your business like the stakes are mine.</p>
     <a href="#contact" class="btn-dark hero-intro-cta">Let's Talk &nbsp;→</a>
   </div>
-
-  <!-- Chapter 3: Services — hidden initially, revealed after About exits -->
 
   <!-- Scroll indicator -->
   <div class="scroll-ind" id="scroll-ind">
@@ -843,11 +836,11 @@
           <div class="scs-card-icon">
             <div class="clay-stage">
               <div class="clay-float">
-              <svg class="clay-shape" viewBox="0 0 100 100">
-                <ellipse cx="42" cy="58" rx="26" ry="24" fill="url(#clayGrad)"/>
-                <ellipse cx="68" cy="40" rx="17" ry="16" fill="url(#clayGrad)"/>
-                <ellipse cx="30" cy="30" rx="13" ry="12" fill="url(#clayGrad)"/>
-                <ellipse cx="35" cy="46" rx="14" ry="8" fill="url(#claySheen)" opacity=".45"/>
+              <svg class="icon-premium" viewBox="0 0 100 100" aria-hidden="true">
+                <rect x="24" y="26" width="52" height="48" rx="7"/>
+                <path d="M24 40h52"/>
+                <path d="M37 20v12M63 20v12"/>
+                <path d="M37 55l9 9 17-18"/>
               </svg>
               </div>
               <div class="clay-shadow"></div>
@@ -861,9 +854,10 @@
           <div class="scs-card-icon">
             <div class="clay-stage">
               <div class="clay-float">
-              <svg class="clay-shape" viewBox="0 0 100 100">
-                <path d="M20 76 C20 46, 50 56, 50 31 C50 11, 75 16, 81 26" fill="none" stroke="url(#clayGrad)" stroke-width="16" stroke-linecap="round"/>
-                <path d="M24 68 C26 50, 48 54, 49 34" fill="none" stroke="url(#claySheen)" stroke-width="5" stroke-linecap="round" opacity=".4"/>
+              <svg class="icon-premium" viewBox="0 0 100 100" aria-hidden="true">
+                <path d="M22 68l16-16 12 10 24-28"/>
+                <path d="M58 32h16v16"/>
+                <circle class="icon-fill" cx="22" cy="68" r="3.5"/>
               </svg>
               </div>
               <div class="clay-shadow"></div>
@@ -877,11 +871,10 @@
           <div class="scs-card-icon">
             <div class="clay-stage">
               <div class="clay-float">
-              <svg class="clay-shape" viewBox="0 0 100 100">
-                <rect x="20" y="60" width="60" height="14" rx="7" fill="url(#clayGrad)" transform="rotate(-4 50 67)"/>
-                <rect x="24" y="42" width="52" height="14" rx="7" fill="url(#clayGrad)" transform="rotate(3 50 49)"/>
-                <rect x="28" y="24" width="44" height="14" rx="7" fill="url(#clayGrad)" transform="rotate(-2 50 31)"/>
-                <rect x="32" y="26" width="34" height="4" rx="2" fill="url(#claySheen)" opacity=".4" transform="rotate(-2 50 31)"/>
+              <svg class="icon-premium" viewBox="0 0 100 100" aria-hidden="true">
+                <rect x="24" y="26" width="52" height="9" rx="4.5"/>
+                <rect x="24" y="45.5" width="40" height="9" rx="4.5"/>
+                <rect x="24" y="65" width="28" height="9" rx="4.5"/>
               </svg>
               </div>
               <div class="clay-shadow"></div>
@@ -895,10 +888,9 @@
           <div class="scs-card-icon">
             <div class="clay-stage">
               <div class="clay-float">
-              <svg class="clay-shape" viewBox="0 0 100 100">
-                <path d="M50 18c16 0 28 14 28 30s-13 30-29 30S20 64 21 47 34 18 50 18z" fill="url(#clayGrad)"/>
-                <circle cx="76" cy="28" r="11" fill="url(#clayGrad)"/>
-                <ellipse cx="42" cy="38" rx="13" ry="9" fill="url(#claySheen)" opacity=".4"/>
+              <svg class="icon-premium" viewBox="0 0 100 100" aria-hidden="true">
+                <path d="M23 30a9 9 0 0 1 9-9h36a9 9 0 0 1 9 9v22a9 9 0 0 1-9 9H46l-11 10v-10h-3a9 9 0 0 1-9-9z"/>
+                <path d="M50 43c-5-6-14-3-14 3 0 5 7 9 14 14 7-5 14-9 14-14 0-6-9-9-14-3z" class="icon-fill"/>
               </svg>
               </div>
               <div class="clay-shadow"></div>
@@ -912,10 +904,9 @@
           <div class="scs-card-icon">
             <div class="clay-stage">
               <div class="clay-float">
-              <svg class="clay-shape" viewBox="0 0 100 100">
-                <rect x="40" y="14" width="20" height="72" rx="10" fill="url(#clayGrad)"/>
-                <rect x="14" y="40" width="72" height="20" rx="10" fill="url(#clayGrad)"/>
-                <rect x="43" y="18" width="8" height="30" rx="4" fill="url(#claySheen)" opacity=".4"/>
+              <svg class="icon-premium" viewBox="0 0 100 100" aria-hidden="true">
+                <path d="M50 16l22 8v18c0 17-10 28-22 34-12-6-22-17-22-34V24z"/>
+                <path d="M50 38v22M39 49h22"/>
               </svg>
               </div>
               <div class="clay-shadow"></div>
@@ -952,7 +943,6 @@
 <!-- ═══════════════════════════════ WHY ME ═══ -->
 <section id="why" class="panel-reveal">
   <div class="s-inner">
-    <p class="kicker">Why Me</p>
     <h2 class="s-heading">Why Founders<br>Keep Me Around</h2>
     <div class="why-grid" id="why-grid">
       <div class="why-card"><strong>Stop being the bottleneck.</strong><p>I take ownership, not just tasks.</p></div>
@@ -971,54 +961,23 @@
 <!-- ═══════════════════════════════ CONTACT ═══ -->
 <section id="contact" class="panel-reveal">
   <div class="s-inner">
-    <p class="kicker">Contact</p>
-    <h2 class="s-heading">Let's get<br>your time back</h2>
     <div class="contact-wrap">
-      <div>
-        <p class="contact-body">Whether you need an executive assistant, an operations partner, customer success support, or someone to keep your pipeline full — I'd love to hear what's slowing you down.</p>
-        <div class="c-links">
-          <a href="mailto:tricianavales20@gmail.com" class="c-link">
-            <div class="c-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7B5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-            tricianavales20@gmail.com
-          </a>
-          <a href="https://www.linkedin.com/in/tricia-claire-navales-15243b242" target="_blank" rel="noopener noreferrer" class="c-link">
-            <div class="c-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="#7B5F8A" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg></div>
-            LinkedIn — Tricia Claire Navales
-          </a>
-          <a href="https://wa.me/639467444925" target="_blank" rel="noopener noreferrer" class="c-link">
-            <div class="c-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="#7B5F8A" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.77.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.07c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.27-.29.58-.36.78-.36.2 0 .39 0 .56.01.18.01.42-.07.66.5.24.59.83 2.02.9 2.17.07.15.12.32.02.51-.1.19-.15.31-.3.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.13.63-.08.17-.21.71-.83.9-1.12.19-.29.38-.24.63-.14.25.1 1.6.75 1.87.89.27.14.45.21.52.32.07.12.07.66-.17 1.34z"/></svg></div>
-            WhatsApp — +63 946 744 4925
-          </a>
-        </div>
+      <h2 class="s-heading">Let's get<br>your time back</h2>
+      <p class="contact-body">Whether you need an executive assistant, an operations partner, customer success support, or someone to keep your pipeline full — I'd love to hear what's slowing you down.</p>
+      <div class="c-links">
+        <a href="mailto:tricianavales20@gmail.com" class="c-link">
+          <div class="c-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7B5F8A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          tricianavales20@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/in/tricia-claire-navales-15243b242" target="_blank" rel="noopener noreferrer" class="c-link">
+          <div class="c-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="#7B5F8A" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg></div>
+          LinkedIn — Tricia Claire Navales
+        </a>
+        <a href="https://wa.me/639467444925" target="_blank" rel="noopener noreferrer" class="c-link">
+          <div class="c-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="#7B5F8A" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.77.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.07c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.12-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.01-2.41.27-.29.58-.36.78-.36.2 0 .39 0 .56.01.18.01.42-.07.66.5.24.59.83 2.02.9 2.17.07.15.12.32.02.51-.1.19-.15.31-.3.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.45.29.15.46.13.63-.08.17-.21.71-.83.9-1.12.19-.29.38-.24.63-.14.25.1 1.6.75 1.87.89.27.14.45.21.52.32.07.12.07.66-.17 1.34z"/></svg></div>
+          WhatsApp — +63 946 744 4925
+        </a>
       </div>
-      <form class="contact-form" id="contactform" action="https://formsubmit.co/ajax/tricianavales20@gmail.com" method="POST" novalidate>
-        <input type="hidden" name="_subject" value="New inquiry from the TCN VA portfolio site" />
-        <input type="hidden" name="_template" value="table" />
-        <input type="hidden" name="_captcha" value="false" />
-        <div class="fg">
-          <label for="cf-name">Your Name</label>
-          <input id="cf-name" name="name" type="text" placeholder="Jane Smith" required autocomplete="name" />
-        </div>
-        <div class="fg">
-          <label for="cf-email">Email</label>
-          <input id="cf-email" name="email" type="email" placeholder="jane@company.com" required autocomplete="email" />
-        </div>
-        <div class="fg">
-          <label for="cf-need">I need help with</label>
-          <select id="cf-need" name="need">
-            <option>Executive Assistance</option>
-            <option>Operations &amp; Customer Success</option>
-            <option>Lead Generation &amp; BizDev</option>
-            <option>Healthcare / Legal Admin</option>
-            <option>Something else</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label for="cf-msg">What's slowing you down?</label>
-          <textarea id="cf-msg" name="message" placeholder="Tell me what's falling through the cracks..."></textarea>
-        </div>
-        <button type="submit" class="form-btn" id="formbtn">Submit &nbsp;→</button>
-      </form>
     </div>
   </div>
 </section>
@@ -1028,7 +987,6 @@
 <footer>
   <div class="f-brand">
     <div class="f-mono">TCN</div>
-    <span class="f-name">TCN VA</span>
   </div>
   <span class="f-copy">Remote · Available worldwide &nbsp;·&nbsp; © 2025 Tricia Claire Navales</span>
 </footer>
@@ -1135,14 +1093,20 @@
       .from('#gl2', { yPercent: 80, opacity: 0, duration: 1.1, ease: 'power4.out' }, '-=0.85')
       .from('#gl3', { yPercent: 60, opacity: 0, duration: 0.9, ease: 'power3.out' }, '-=0.7')
       .from('.hero-photo', { y: 40, opacity: 0, duration: 1.2, ease: 'power3.out' }, '-=0.9')
-      .from('#heroTopBadge', { y: -20, opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.7')
+      .from('#heroLeft', { y: -20, opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.7')
+      .from('#heroRight', { x: 20, opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.6')
       .from('#scroll-ind', { opacity: 0, duration: 0.8 }, '-=0.3');
 
     /* ── Pinned hero scroll transition — adapted from Update 2 script ── */
     const heroEl = document.getElementById('hero');
 
-    if (window.matchMedia('(min-width: 769px)').matches) {
-      /* Desktop: 3-chapter pinned storytelling — hero pins for 2.5 viewport heights */
+    if (window.matchMedia('(min-width: 961px)').matches) {
+      /* Desktop: 3-chapter pinned storytelling — hero pins for 2.5 viewport heights.
+         Threshold matches the CSS @media(max-width:960px) breakpoint so JS and
+         layout never disagree about which mode is active — a mismatch here
+         (this used to be 769px vs CSS's 960px) meant anything in the 769-960px
+         gap ran desktop pin logic against mobile CSS, producing broken-looking
+         layout shifts at in-between zoom levels / window widths. */
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: heroEl,
@@ -1150,7 +1114,15 @@
           end: () => '+=' + (window.innerHeight * 0.9),
           scrub: 1,
           pin: true,
-          anticipatePin: 1
+          anticipatePin: 1,
+          /* Re-evaluates function-based tween values (like .hero-photo's
+             x: () => {...} clamp, which reads the photo's rendered width)
+             on every ScrollTrigger.refresh() instead of only once at
+             creation time — without this, if the photo image hadn't
+             finished loading/decoding yet when this timeline was built,
+             offsetWidth would read 0 and the clamp would silently do
+             nothing, letting the photo clip past the viewport edge again. */
+          invalidateOnRefresh: true
         }
       });
 
@@ -1160,10 +1132,22 @@
         /* fromTo (not .to) with an explicit start opacity — see the Ch2 EXIT
            comment below for why a plain .to() here would race heroTL and
            get permanently stuck invisible. */
-        .fromTo('#heroTopBadge', { opacity: 1 }, { opacity: 0, y: -30, ease: 'none', duration: 0.5 }, 0)
+        .fromTo(['#heroLeft', '#heroRight'], { opacity: 1 }, { opacity: 0, y: -30, ease: 'none', duration: 0.5 }, 0)
         .fromTo('.hero-photo',
           { x: 0 },
-          { x: () => -window.innerWidth * 0.26, ease: 'power2.inOut', duration: 0.7 },
+          {
+            /* Cap the leftward slide so the photo never clips past the
+               viewport edge — clamp to whatever margin is actually left
+               after its own rendered width, instead of a flat % of
+               viewport width that ignores how wide the photo itself is. */
+            x: () => {
+              const photoEl = document.querySelector('.hero-photo');
+              const desired = window.innerWidth * 0.26;
+              const safeMax = Math.max(0, window.innerWidth / 2 - photoEl.offsetWidth / 2 - 24);
+              return -Math.min(desired, safeMax);
+            },
+            ease: 'power2.inOut', duration: 0.7
+          },
           0)
 
         /* ── Ch2 ENTER: About bio slides in from right ── */
@@ -1190,7 +1174,7 @@
         x: -160, opacity: 0, ease: 'none',
         scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: 1 }
       });
-      gsap.fromTo('#heroTopBadge', { opacity: 1 }, {
+      gsap.fromTo(['#heroLeft', '#heroRight'], { opacity: 1 }, {
         y: -60, opacity: 0, ease: 'none',
         scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: 1 }
       });
@@ -1375,11 +1359,6 @@
     });
 
 
-    /* Contact form */
-    gsap.from('#contact .contact-form', {
-      opacity: 0, x: 30, duration: 0.8, ease: 'power2.out',
-      scrollTrigger: { trigger: '#contact .contact-form', start: 'top 88%' }
-    });
 
     /* Section headings: subtle slide up */
     document.querySelectorAll('.s-heading').forEach(h => {
@@ -1406,58 +1385,21 @@
   });
 
 
-  /* ── Contact form: emails Tricia via FormSubmit, then opens a pre-filled
-     WhatsApp message to her number so she also gets notified there.
-     Browsers can't send a WhatsApp message with zero taps — no backend,
-     no paid API — so this opens wa.me with the text already filled in;
-     the visitor just taps Send once inside WhatsApp. The blank tab is
-     opened synchronously (before the await) so it survives as a direct
-     result of the click — opening it after the await gets popup-blocked
-     since the "real" user-gesture window has closed by then. ── */
-  document.getElementById('contactform').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const btn = document.getElementById('formbtn');
-    btn.textContent = 'Sending…';
-    btn.disabled = true;
-
-    const data = new FormData(form);
-    const waWindow = window.open('', '_blank');
-
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { Accept: 'application/json' },
-      });
-      if (!res.ok) throw new Error('Request failed');
-
-      const waText =
-        `New inquiry from the portfolio site\n` +
-        `Name: ${data.get('name')}\n` +
-        `Email: ${data.get('email')}\n` +
-        `Need: ${data.get('need')}\n` +
-        `Message: ${data.get('message') || '—'}`;
-      const waLink = `https://wa.me/639467444925?text=${encodeURIComponent(waText)}`;
-      if (waWindow) waWindow.location = waLink; else window.open(waLink, '_blank');
-
-      btn.textContent = 'Message sent ✓';
-      btn.style.background = '#4A8A55';
-      form.reset();
-    } catch (err) {
-      if (waWindow) waWindow.close();
-      btn.textContent = 'Couldn\'t send — try WhatsApp instead';
-      btn.style.background = '#B3402F';
-    }
-    setTimeout(() => { btn.textContent = 'Submit →'; btn.style.background = ''; btn.disabled = false; }, 4500);
-  });
-
 /* All pinned sections are created above; pin spacers shift document layout
    as each is inserted, so trigger start/end positions computed mid-script
    can go stale. Force one full recalculation now that every ScrollTrigger
    exists. */
 ScrollTrigger.refresh();
 window.addEventListener('load', () => ScrollTrigger.refresh());
+/* Fraunces/Inter swap in after the initial paint (Google Fonts <link>,
+   not preloaded) and can shift section heights slightly once they do —
+   if that happens after ScrollTrigger already measured pin start/end
+   positions, pinned sections (like the hero) can release at the wrong
+   scroll offset, which looks like the section "gets stuck" or fails to
+   fully restore its original state when scrolling back up past it. */
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => ScrollTrigger.refresh());
+}
 </script>
 </body>
 </html>
