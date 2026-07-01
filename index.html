@@ -651,24 +651,38 @@
          visible in reading order — badge/headline, photo, About copy. */
       #hero {
         height: auto; min-height: 100dvh; overflow: visible;
-        display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-        padding: 100px 24px 56px; gap: 28px;
+        display: grid; grid-template-columns: 1fr; row-gap: 20px; justify-items: center;
+        padding: 100px 24px 56px;
+        grid-template-areas: "badge" "photo" "desc" "about" "scroll";
       }
-      .hero-ghost { display: none; }
-      .hero-photo { position: relative; bottom: auto; left: auto; transform: none; height: 46vh; order: 2; }
+      /* Ghost name and photo share the same grid cell (grid areas can
+         overlap on purpose) instead of .hero-ghost's desktop position:
+         absolute; inset:0 — that would've centered it across the WHOLE
+         (now much taller) hero instead of just behind the photo. DOM
+         order (ghost markup comes first) puts it visually behind. */
+      .hero-ghost {
+        position: static; grid-area: photo; inset: auto;
+        padding-bottom: 0; pointer-events: none;
+      }
+      .hero-photo { position: relative; bottom: auto; left: auto; transform: none; height: 42vh; grid-area: photo; justify-self: center; }
       .hero-left {
         position: relative; left: auto; top: auto; transform: none;
         align-items: center; text-align: center; padding: 0; gap: 12px; max-width: 320px;
-        order: 1;
+        grid-area: badge;
       }
       .hero-headline { font-size: clamp(26px, 6.6vw, 40px); text-align: center; }
-      .hero-right { display: none; }
+      /* Desktop hides this (the split-hero side column); mobile shows it
+         again, right under the photo, per client request. */
+      .hero-right {
+        display: flex; grid-area: desc; position: static; right: auto; top: auto; transform: none;
+        max-width: 340px; text-align: center; align-items: center; padding: 0 8px;
+      }
       .hero-intro {
         position: relative; inset: auto; opacity: 1; pointer-events: auto;
         padding: 0; text-align: center; align-items: center; max-width: 340px;
-        order: 3;
+        grid-area: about;
       }
-      .scroll-ind { position: relative; bottom: auto; order: 4; margin-top: 8px; }
+      .scroll-ind { position: relative; bottom: auto; grid-area: scroll; margin-top: 4px; }
 
       .s-inner, .s-inner-narrow { padding: 76px 24px; }
       .ab-inner { padding: 80px 24px; }
@@ -680,7 +694,7 @@
 
       /* card stack responsive */
       .scs-inner { grid-template-columns: 1fr; padding: 0 24px; }
-      .scs-left { padding: 80px 0 40px; }
+      .scs-left { padding: 80px 0 72px; align-items: center; text-align: center; }
       .scs-right { padding: 0 0 80px; }
       .scs-deck { width: 280px; height: 370px; }
     }
@@ -1086,7 +1100,14 @@
   mm.add('(prefers-reduced-motion: no-preference)', () => {
 
     /* ── Hero intro sequence ── */
-    gsap.set('.hero-photo', { xPercent: -50 }); /* lock centering under GSAP before any x animation */
+    /* Locks in the desktop left:50% + translateX(-50%) centering trick
+       before the Ch1->Ch2 x-shift animates it further — only applies on
+       desktop, where .hero-photo is still absolutely positioned. Mobile
+       centers the photo with CSS Grid (justify-self:center) instead, so
+       this extra -50% transform would just shift it off-screen there. */
+    if (window.matchMedia('(min-width: 961px)').matches) {
+      gsap.set('.hero-photo', { xPercent: -50 });
+    }
     const heroTL = gsap.timeline({ delay: 0.05 });
     heroTL
       .from('#gl1', { yPercent: 80, opacity: 0, duration: 1.1, ease: 'power4.out' })
@@ -1164,21 +1185,19 @@
            wrong value every tick via the scrub's continuous render loop. */
         .fromTo(['#hero-intro', '.hero-photo'], { opacity: 1 }, { opacity: 0, ease: 'power1.inOut', duration: 0.35 }, 0.85);
 
-    } else {
-      /* Mobile: no pin — simple scroll fade, no layout lock */
-      gsap.to('#hero-ghost', {
-        y: -80, opacity: 0, ease: 'none',
-        scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: 1 }
-      });
-      gsap.to('.hero-photo', {
-        x: -160, opacity: 0, ease: 'none',
-        scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: 1 }
-      });
-      gsap.fromTo(['#heroLeft', '#heroRight'], { opacity: 1 }, {
-        y: -60, opacity: 0, ease: 'none',
-        scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: 1 }
-      });
     }
+    /* Mobile: no pin, no scroll-linked fade. The mobile hero is now a
+       normal static stack (badge/headline, photo, description, About) —
+       everything is just always visible in reading order, same as any
+       other section. It used to scroll-fade the photo/badge/ghost out
+       across the whole hero's scroll range as a stand-in for the desktop
+       chapter-swap, but since the hero got much taller once About became
+       part of the normal flow (see the @media max-width:960px rules),
+       "bottom top" landed much further down — scrolling past the photo
+       faded it to opacity:0 well before the end, and it wouldn't
+       reliably fade back on scroll-up (looked "gone forever"). Nothing
+       needs to fade here anymore, so the animations were removed rather
+       than retuned. */
 
     /* ════════════════════════════════════════════════════════
        SERVICES CARD STACK — penguin-capital style
@@ -1231,7 +1250,11 @@
       });
 
       /* ── GSAP timeline pinned to section ── */
-      const SCROLL_PER_CARD = window.innerHeight * 0.85;
+      /* Shorter per-card scroll distance on mobile — the 0.85x-viewport-
+         height figure was tuned for desktop trackpad/wheel scrolling;
+         on a phone it turns each card transition into several full
+         swipes of visually-static screen, which reads as a dead gap. */
+      const SCROLL_PER_CARD = window.innerHeight * (window.innerWidth < 960 ? 0.5 : 0.85);
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -1314,7 +1337,10 @@
       ScrollTrigger.create({
         trigger: section,
         start: 'top top',
-        end: () => '+=' + (window.innerHeight * 2.2),
+        /* Same mobile-vs-desktop scroll-distance split as the card stack
+           above — 2.2x viewport height of pinned scroll for an orbit
+           animation feels like a long dead zone on a phone. */
+        end: () => '+=' + (window.innerHeight * (window.innerWidth < 960 ? 1.3 : 2.2)),
         pin: true,
         scrub: 1,
         anticipatePin: 1,
