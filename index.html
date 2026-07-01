@@ -250,8 +250,8 @@
     .hero-intro-cta { margin-top: 32px; pointer-events: auto; }
 
     /* ─── SHARED ─── */
-    .s-inner { max-width: 1200px; margin: 0 auto; padding: 110px 60px; position: relative; }
-    .s-inner-narrow { max-width: 1200px; margin: 0 auto; padding: 110px 60px; }
+    .s-inner { max-width: 1200px; margin: 0 auto; padding: 72px 60px; position: relative; }
+    .s-inner-narrow { max-width: 1200px; margin: 0 auto; padding: 72px 60px; }
     .kicker {
       font-size: 10.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
       color: var(--plum); margin-bottom: 20px;
@@ -1132,7 +1132,7 @@
         scrollTrigger: {
           trigger: heroEl,
           start: 'top top',
-          end: () => '+=' + (window.innerHeight * 0.9),
+          end: () => '+=' + (window.innerHeight * 0.65),
           scrub: 1,
           pin: true,
           anticipatePin: 1,
@@ -1254,7 +1254,7 @@
          height figure was tuned for desktop trackpad/wheel scrolling;
          on a phone it turns each card transition into several full
          swipes of visually-static screen, which reads as a dead gap. */
-      const SCROLL_PER_CARD = window.innerHeight * (window.innerWidth < 960 ? 0.5 : 0.85);
+      const SCROLL_PER_CARD = window.innerHeight * (window.innerWidth < 960 ? 0.5 : 0.62);
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -1340,7 +1340,7 @@
         /* Same mobile-vs-desktop scroll-distance split as the card stack
            above — 2.2x viewport height of pinned scroll for an orbit
            animation feels like a long dead zone on a phone. */
-        end: () => '+=' + (window.innerHeight * (window.innerWidth < 960 ? 1.3 : 2.2)),
+        end: () => '+=' + (window.innerHeight * (window.innerWidth < 960 ? 1.3 : 1.6)),
         pin: true,
         scrub: 1,
         anticipatePin: 1,
