@@ -144,7 +144,7 @@
       position: absolute; bottom: 0;
       left: 50%; transform: translateX(-50%);
       z-index: 2; pointer-events: none;
-      height: 91vh; width: auto;
+      height: 82vh; width: auto;
     }
     .hero-photo img {
       height: 100%; width: auto;
@@ -154,14 +154,13 @@
       mix-blend-mode: multiply;
     }
 
-    /* ─── HERO FOREGROUND ─── */
-    .hero-fg {
-      position: relative; z-index: 3;
-      width: 100%; padding: 0 60px 48px;
-      display: flex; align-items: flex-end; justify-content: space-between;
-      gap: 24px;
+    /* ─── TOP BADGE + HEADLINE — sits above the photo's head, below the nav ─── */
+    .hero-top-badge {
+      position: absolute; z-index: 3;
+      top: 118px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      text-align: center;
     }
-    .hero-left { display: flex; flex-direction: column; gap: 10px; }
     .hero-avail {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 6px 14px; border-radius: 100px;
@@ -175,16 +174,19 @@
     }
     .hero-avail span { font-size: 10.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); }
     @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.35; transform:scale(.7); } }
-    .hero-role { font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--plum); white-space: nowrap; }
-
-    /* Role label anchored at the photo's shoulder height, just left of the shoulder edge */
-    .hero-role-pos {
-      position: absolute; z-index: 3; pointer-events: none;
-      top: 58%; left: 50%;
-      transform: translate(calc(-100% - 27vh), -50%);
+    .hero-top-headline {
+      font-family: 'Inter', sans-serif; font-weight: 600;
+      font-size: clamp(15px, 1.8vw, 21px); letter-spacing: .1em; text-transform: uppercase;
+      color: var(--dark); margin: 0; white-space: nowrap;
     }
-    .hero-role-pos .hero-role { text-align: right; }
 
+    /* ─── HERO FOREGROUND ─── */
+    .hero-fg {
+      position: relative; z-index: 3;
+      width: 100%; padding: 0 60px 48px;
+      display: flex; align-items: flex-end; justify-content: flex-end;
+      gap: 24px;
+    }
     .hero-right { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
     .btn-dark {
       display: inline-block; background: var(--dark); color: #FDFAF5;
@@ -582,37 +584,6 @@
     .why-card strong { display: block; font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 7px; line-height: 1.4; }
     .why-card p { font-size: 13px; line-height: 1.6; color: var(--mid); }
 
-    /* ─── TESTIMONIALS ─── */
-    #testimonials { background: var(--bg); position: relative; }
-    .testi-note {
-      display: inline-block; margin: 14px 0 44px;
-      font-size: 11.5px; color: rgba(26,18,9,.4); font-style: italic;
-      border: 1px dashed rgba(26,18,9,.15); padding: 7px 14px; border-radius: 2px;
-    }
-    .testi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: rgba(26,18,9,.08); }
-    .testi-card { background: var(--dark); padding: 48px; }
-    .testi-q {
-      font-family: 'Fraunces', serif; font-optical-sizing: auto;
-      font-style: italic; font-weight: 400;
-      font-size: 21px; line-height: 1.54; color: rgba(253,250,245,.8);
-      margin-bottom: 32px; padding-top: 26px; position: relative;
-    }
-    .testi-q::before {
-      content: '"'; position: absolute; top: -14px; left: -4px;
-      font-size: 80px; font-family: 'Fraunces', serif; font-style: normal; font-weight: 700;
-      color: var(--plum); opacity: .18; line-height: 1;
-    }
-    .testi-attr { display: flex; align-items: center; gap: 14px; }
-    .testi-av {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: rgba(123,95,138,.15); border: 1px solid rgba(123,95,138,.28);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Fraunces', serif; font-weight: 600; font-size: 17px;
-      color: var(--plum-l); flex-shrink: 0;
-    }
-    .testi-name { font-size: 13.5px; font-weight: 600; color: #FDFAF5; }
-    .testi-role { font-size: 11.5px; color: rgba(253,250,245,.34); margin-top: 2px; }
-
     /* ─── CONTACT ─── */
     #contact { background: var(--bg); position: relative; }
     .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 60px; align-items: start; }
@@ -682,7 +653,6 @@
     }
     #services::before { background: var(--bg); }
     #why::before    { background: var(--bg); }
-    #testimonials::before { background: var(--bg); }
     #contact::before { background: var(--bg); }
 
     /* ─── RESPONSIVE ─── */
@@ -693,8 +663,8 @@
 
       #hero { height: 100dvh; }
       .hero-fg { padding: 0 24px 44px; flex-wrap: wrap; gap: 18px; }
-      .hero-role-pos { top: auto; bottom: 112px; left: 24px; transform: none; }
-      .hero-role-pos .hero-role { text-align: left; }
+      .hero-top-badge { top: 84px; padding: 0 24px; gap: 12px; }
+      .hero-top-headline { white-space: normal; letter-spacing: .06em; max-width: 280px; }
       .hero-ghost .ghost-line-1, .hero-ghost .ghost-line-2 { font-size: clamp(60px, 14vw, 120px); }
       .hero-ghost .ghost-line-3 { font-size: clamp(30px, 7vw, 64px); }
 
@@ -703,8 +673,10 @@
       .ab-grid { grid-template-columns: 1fr; }
       .ab-item { padding: 36px 24px; }
       .svc-grid, .contact-wrap { grid-template-columns: 1fr; gap: 44px; }
+      /* Stacked layout puts the form first — it's the primary action,
+         not buried below the intro paragraph and three contact links. */
+      .contact-wrap .contact-form { order: -1; }
       .why-grid { grid-template-columns: repeat(2,1fr); }
-      .testi-grid { grid-template-columns: 1fr; }
       footer { flex-direction: column; gap: 8px; padding: 20px 24px; text-align: center; }
 
       /* card stack responsive */
@@ -715,7 +687,7 @@
     }
     @media (max-width: 600px) {
       .hero-photo { height: 75vh; }
-      .svc-card, .testi-card { padding: 32px 20px; }
+      .svc-card { padding: 32px 20px; }
       .why-grid { grid-template-columns: 1fr; }
       .why-card { padding: 26px 20px; }
 
@@ -784,20 +756,17 @@
     <img src="./tricia.png" alt="Tricia Claire Navales — Executive Assistant" loading="eager" />
   </div>
 
-  <!-- Role label, aligned at the photo's shoulder height -->
-  <div class="hero-role-pos" id="hero-role-pos">
-    <p class="hero-role">General Virtual Assistant</p>
+  <!-- Badge + headline, above the photo's head -->
+  <div class="hero-top-badge" id="heroTopBadge">
+    <div class="hero-avail">
+      <div class="dot"></div>
+      <span>Available worldwide</span>
+    </div>
+    <h1 class="hero-top-headline">Your General Virtual Assistant</h1>
   </div>
 
   <!-- Foreground content — bottom of hero, z-index 3 -->
   <div class="hero-fg" id="hero-fg">
-    <div class="hero-left" id="hero-left">
-      <div class="hero-avail">
-        <div class="dot"></div>
-        <span>Available worldwide</span>
-      </div>
-    </div>
-
     <div class="hero-right" id="hero-right">
       <a href="#contact" class="btn-dark">Let's Talk &nbsp;→</a>
     </div>
@@ -1010,32 +979,6 @@
 </section>
 
 
-<!-- ═══════════════════════════════ TESTIMONIALS ═══ -->
-<section id="testimonials" class="panel-reveal">
-  <div class="s-inner">
-    <p class="kicker">Testimonials</p>
-    <h2 class="s-heading">What People Say</h2>
-    <span class="testi-note">Replace with real quotes + name, role &amp; company.</span>
-    <div class="testi-grid">
-      <div class="testi-card">
-        <p class="testi-q">Tricia took our operations off my plate within her first month. I stopped worrying about the things that used to keep me up at night.</p>
-        <div class="testi-attr">
-          <div class="testi-av">S</div>
-          <div><p class="testi-name">Sarah M.</p><p class="testi-role">Founder — [Company]</p></div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <p class="testi-q">She's the rare hire who makes the whole team faster — proactive, sharp, and genuinely easy to work with.</p>
-        <div class="testi-attr">
-          <div class="testi-av">J</div>
-          <div><p class="testi-name">James R.</p><p class="testi-role">CEO — [Company]</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
 <!-- ═══════════════════════════════ CONTACT ═══ -->
 <section id="contact" class="panel-reveal">
   <div class="s-inner">
@@ -1085,7 +1028,7 @@
           <label for="cf-msg">What's slowing you down?</label>
           <textarea id="cf-msg" name="message" placeholder="Tell me what's falling through the cracks..."></textarea>
         </div>
-        <button type="submit" class="form-btn" id="formbtn">Send Message &nbsp;→</button>
+        <button type="submit" class="form-btn" id="formbtn">Submit &nbsp;→</button>
       </form>
     </div>
   </div>
@@ -1203,8 +1146,7 @@
       .from('#gl2', { yPercent: 80, opacity: 0, duration: 1.1, ease: 'power4.out' }, '-=0.85')
       .from('#gl3', { yPercent: 60, opacity: 0, duration: 0.9, ease: 'power3.out' }, '-=0.7')
       .from('.hero-photo', { y: 40, opacity: 0, duration: 1.2, ease: 'power3.out' }, '-=0.9')
-      .from('#hero-left',  { x: -30, opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.6')
-      .from('#hero-role-pos', { opacity: 0, duration: 0.7, ease: 'power2.out' }, '-=0.5')
+      .from('#heroTopBadge', { y: -20, opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.7')
       .from('#hero-right', { x: 30, opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.6')
       .from('#scroll-ind', { opacity: 0, duration: 0.8 }, '-=0.3');
 
@@ -1227,7 +1169,10 @@
       tl
         /* ── Ch1 → EXIT: clear all layers, photo slides left ── */
         .to(['#hero-ghost', '#scroll-ind'], { opacity: 0, y: -50, ease: 'none', duration: 0.6 }, 0)
-        .to(['#hero-fg', '#hero-role-pos'], { opacity: 0, y: -30, ease: 'none', duration: 0.5 }, 0)
+        /* fromTo (not .to) with an explicit start opacity — see the Ch2 EXIT
+           comment below for why a plain .to() here would race heroTL and
+           get permanently stuck invisible. */
+        .fromTo(['#hero-fg', '#heroTopBadge'], { opacity: 1 }, { opacity: 0, y: -30, ease: 'none', duration: 0.5 }, 0)
         .fromTo('.hero-photo',
           { x: 0 },
           { x: () => -window.innerWidth * 0.26, ease: 'power2.inOut', duration: 0.7 },
@@ -1257,7 +1202,7 @@
         x: -160, opacity: 0, ease: 'none',
         scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: 1 }
       });
-      gsap.to(['#hero-fg', '#hero-role-pos'], {
+      gsap.fromTo(['#hero-fg', '#heroTopBadge'], { opacity: 1 }, {
         y: -60, opacity: 0, ease: 'none',
         scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: 1 }
       });
@@ -1358,8 +1303,8 @@
        into orbiting tool names that rotate continuously while scrolling →
        orbit converges back to center and disappears → next section.
        Created before the panel-reveal triggers below: those measure the
-       position of #why/#testimonials/#contact, which sit after this pin's
-       spacer, so this must exist first or their start offsets go stale. */
+       position of #why/#contact, which sit after this pin's spacer, so
+       this must exist first or their start offsets go stale. */
     (function initToolsStory() {
       const section = document.getElementById('tools');
       if (!section) return;
@@ -1448,12 +1393,6 @@
       scrollTrigger: { trigger: '#contact .contact-form', start: 'top 88%' }
     });
 
-    /* Testimonial cards */
-    gsap.from('.testi-card', {
-      opacity: 0, y: 28, duration: 0.6, stagger: 0.15, ease: 'power2.out',
-      scrollTrigger: { trigger: '.testi-grid', start: 'top 86%' }
-    });
-
     /* Section headings: subtle slide up */
     document.querySelectorAll('.s-heading').forEach(h => {
       gsap.from(h, {
@@ -1479,7 +1418,14 @@
   });
 
 
-  /* ── Contact form: posts to FormSubmit so submissions land in Tricia's inbox ── */
+  /* ── Contact form: emails Tricia via FormSubmit, then opens a pre-filled
+     WhatsApp message to her number so she also gets notified there.
+     Browsers can't send a WhatsApp message with zero taps — no backend,
+     no paid API — so this opens wa.me with the text already filled in;
+     the visitor just taps Send once inside WhatsApp. The blank tab is
+     opened synchronously (before the await) so it survives as a direct
+     result of the click — opening it after the await gets popup-blocked
+     since the "real" user-gesture window has closed by then. ── */
   document.getElementById('contactform').addEventListener('submit', async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -1487,21 +1433,35 @@
     btn.textContent = 'Sending…';
     btn.disabled = true;
 
+    const data = new FormData(form);
+    const waWindow = window.open('', '_blank');
+
     try {
       const res = await fetch(form.action, {
         method: 'POST',
-        body: new FormData(form),
+        body: data,
         headers: { Accept: 'application/json' },
       });
       if (!res.ok) throw new Error('Request failed');
+
+      const waText =
+        `New inquiry from the portfolio site\n` +
+        `Name: ${data.get('name')}\n` +
+        `Email: ${data.get('email')}\n` +
+        `Need: ${data.get('need')}\n` +
+        `Message: ${data.get('message') || '—'}`;
+      const waLink = `https://wa.me/639467444925?text=${encodeURIComponent(waText)}`;
+      if (waWindow) waWindow.location = waLink; else window.open(waLink, '_blank');
+
       btn.textContent = 'Message sent ✓';
       btn.style.background = '#4A8A55';
       form.reset();
     } catch (err) {
+      if (waWindow) waWindow.close();
       btn.textContent = 'Couldn\'t send — try WhatsApp instead';
       btn.style.background = '#B3402F';
     }
-    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; btn.disabled = false; }, 4500);
+    setTimeout(() => { btn.textContent = 'Submit →'; btn.style.background = ''; btn.disabled = false; }, 4500);
   });
 
 /* All pinned sections are created above; pin spacers shift document layout
