@@ -180,14 +180,6 @@
       color: var(--dark); margin: 0; white-space: nowrap;
     }
 
-    /* ─── HERO FOREGROUND ─── */
-    .hero-fg {
-      position: relative; z-index: 3;
-      width: 100%; padding: 0 60px 48px;
-      display: flex; align-items: flex-end; justify-content: flex-end;
-      gap: 24px;
-    }
-    .hero-right { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
     .btn-dark {
       display: inline-block; background: var(--dark); color: #FDFAF5;
       font-size: 12.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
@@ -244,6 +236,10 @@
       font-size: 15px; line-height: 1.76; color: var(--mid);
       max-width: 420px;
     }
+    /* .hero-intro has pointer-events:none (it's a decorative overlay until
+       GSAP reveals it) — the CTA needs its own pointer-events back so it's
+       actually clickable once visible. */
+    .hero-intro-cta { margin-top: 32px; pointer-events: auto; }
 
     /* ─── HERO CH3 — Services teaser ─── */
 
@@ -662,7 +658,6 @@
       .hbg { display: flex; }
 
       #hero { height: 100dvh; }
-      .hero-fg { padding: 0 24px 44px; flex-wrap: wrap; gap: 18px; }
       .hero-top-badge { top: 84px; padding: 0 24px; gap: 12px; }
       .hero-top-headline { white-space: normal; letter-spacing: .06em; max-width: 280px; }
       .hero-ghost .ghost-line-1, .hero-ghost .ghost-line-2 { font-size: clamp(60px, 14vw, 120px); }
@@ -765,18 +760,12 @@
     <h1 class="hero-top-headline">Your General Virtual Assistant</h1>
   </div>
 
-  <!-- Foreground content — bottom of hero, z-index 3 -->
-  <div class="hero-fg" id="hero-fg">
-    <div class="hero-right" id="hero-right">
-      <a href="#contact" class="btn-dark">Let's Talk &nbsp;→</a>
-    </div>
-  </div>
-
   <!-- Chapter 2: About — hidden initially, revealed on scroll as photo exits -->
   <div class="hero-intro" id="hero-intro">
     <span class="hero-intro-kicker">· About ·</span>
     <h2 class="hero-intro-heading">A partner who works<br>like she owns it</h2>
     <p class="hero-intro-body">Years supporting founders across AU and the US — not just completing tasks, but learning how you work, filling gaps before they become problems, and treating your business like the stakes are mine.</p>
+    <a href="#contact" class="btn-dark hero-intro-cta">Let's Talk &nbsp;→</a>
   </div>
 
   <!-- Chapter 3: Services — hidden initially, revealed after About exits -->
@@ -1147,7 +1136,6 @@
       .from('#gl3', { yPercent: 60, opacity: 0, duration: 0.9, ease: 'power3.out' }, '-=0.7')
       .from('.hero-photo', { y: 40, opacity: 0, duration: 1.2, ease: 'power3.out' }, '-=0.9')
       .from('#heroTopBadge', { y: -20, opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.7')
-      .from('#hero-right', { x: 30, opacity: 0, duration: 0.8, ease: 'power2.out' }, '-=0.6')
       .from('#scroll-ind', { opacity: 0, duration: 0.8 }, '-=0.3');
 
     /* ── Pinned hero scroll transition — adapted from Update 2 script ── */
@@ -1172,7 +1160,7 @@
         /* fromTo (not .to) with an explicit start opacity — see the Ch2 EXIT
            comment below for why a plain .to() here would race heroTL and
            get permanently stuck invisible. */
-        .fromTo(['#hero-fg', '#heroTopBadge'], { opacity: 1 }, { opacity: 0, y: -30, ease: 'none', duration: 0.5 }, 0)
+        .fromTo('#heroTopBadge', { opacity: 1 }, { opacity: 0, y: -30, ease: 'none', duration: 0.5 }, 0)
         .fromTo('.hero-photo',
           { x: 0 },
           { x: () => -window.innerWidth * 0.26, ease: 'power2.inOut', duration: 0.7 },
@@ -1202,7 +1190,7 @@
         x: -160, opacity: 0, ease: 'none',
         scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: 1 }
       });
-      gsap.fromTo(['#hero-fg', '#heroTopBadge'], { opacity: 1 }, {
+      gsap.fromTo('#heroTopBadge', { opacity: 1 }, {
         y: -60, opacity: 0, ease: 'none',
         scrollTrigger: { trigger: heroEl, start: 'top top', end: 'bottom top', scrub: 1 }
       });
